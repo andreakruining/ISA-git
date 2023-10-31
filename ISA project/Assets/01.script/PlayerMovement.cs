@@ -4,44 +4,104 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float Speed = 3f;
- 
-    void Update()
-    {
-        moving();
+    //movement
+    [Header("Movement")]
+    [SerializeField]
+    private float moveSpeed = 10f;
+    [SerializeField]
+    private float groundDrag = 3f;
 
+    [Header("Ground Check")]
+    public float playerHeight;
+    public LayerMask whatIsGround;
+    bool grounded;
+
+    public Transform orientation;
+
+    float horizantalInput;
+    float verticalInput;
+
+    Vector3 moveDirection;
+
+    Rigidbody rb;
+
+    //public float turnSmoothTime = 0.1f;
+    //float turnSmoothVelocity;
+
+    //[SerializeField]
+    //private Transform cameraTransform;
+
+    private void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+        rb.freezeRotation = true;
     }
 
-    private void moving()
+    void Update()
     {
-                Vector3 position = transform.position;
+        //perform ground check
+        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
 
-        if(Input.GetKey("a"))
+        SpeedControl();
+        //MyInput();
+        Move();
+
+        //handle drag
+        if (grounded)
         {
-            position.x -= Speed * Time.deltaTime;
+            rb.drag = groundDrag;
         }
-
-        transform.position = position;
-
-        if(Input.GetKey("d"))
+        else
         {
-            position.x += Speed * Time.deltaTime;
+            rb.drag = 0;
         }
+    }
 
-        transform.position = position;
+    private void FixedUpdate()
+    {
+        
+    }
 
-        if(Input.GetKey("w"))
+    private void Move()
+    {
+        horizantalInput = Input.GetAxisRaw("Horizontal");
+        verticalInput = Input.GetAxisRaw("Vertical");
+
+        moveDirection = orientation.forward * verticalInput + orientation.right * horizantalInput;
+
+        rb.AddForce(moveDirection.normalized * moveSpeed * 4f, ForceMode.Force);
+
+       // moveDirection = Quaternion.AngleAxis(cameraTransform.rotation.eulerAngles.y, Vector3.up) * moveDirection;
+    }
+
+    //private void MyInput()
+    //{
+       
+
+    //   moveDirection= new Vector3(horizantalInput, 0f, verticalInput);
+
+    //    if(moveDirection.magnitude >= 0.1f)
+    //    {
+    //        float targetAngle = Mathf.Atan2(moveDirection.x, moveDirection.y) * Mathf.Rad2Deg;
+    //        float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime);
+    //        transform.rotation = Quaternion.Euler(0f, angle, 0f);
+
+
+    //        controller.Move(moveDirection * moveSpeed * Time.deltaTime);
+    //    }
+
+
+    //}
+
+    private void SpeedControl()
+    {
+        Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+
+        //limit veolicity if needed
+        if (flatVel.magnitude > moveSpeed)
         {
-            position.z += Speed * Time.deltaTime;
+            Vector3 limitedVel = flatVel.normalized * moveSpeed;
+            rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
         }
-
-        transform.position = position;
-
-        if(Input.GetKey("s"))
-        {
-            position.z -= Speed * Time.deltaTime;
-        }
-
-        transform.position = position;
     }
 }

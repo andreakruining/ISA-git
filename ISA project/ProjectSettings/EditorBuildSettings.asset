@@ -4,5 +4,20 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/05. Scenes/OpeningMenu.unity
+    guid: 16e209a027bdd444e8dc7f748639a67f
+  - enabled: 1
+    path: Assets/05. Scenes/AnxietyLevel.unity
+    guid: 3af907f9d52df9c43994f17d05faed82
+  - enabled: 1
+    path: Assets/05. Scenes/DepressionLevel.unity
+    guid: 7db83b98c15b27c48931f85467c4ed71
+  - enabled: 1
+    path: Assets/05. Scenes/ptsdLevel.unity
+    guid: 92f0ea602b05255449b688330119ee6b
+  - enabled: 1
+    path: Assets/05. Scenes/FlashbackCage.unity
+    guid: 48cb0e4363b8ae34699bf46b5b26ce8e
   m_configObjects: {}

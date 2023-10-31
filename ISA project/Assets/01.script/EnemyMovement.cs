@@ -5,15 +5,18 @@ using UnityEngine.AI;
 
 public class EnemyMovement : MonoBehaviour
 {
+    //setup ai movement
     public enum State { Patrol, Chase }
     public State activeState;
+    
+    //setup waypoints/patrol state
     public NavMeshAgent agent;
-
     public Transform[] wayPoints;
     public int speed; 
     private int waypointIndex;
     private float dist;
 
+    //setup chase state conditions
     public float chaseDistance = 5f;
     public Transform Player;
 

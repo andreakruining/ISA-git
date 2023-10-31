@@ -6,6 +6,7 @@ TagManager:
   tags:
   - end
   - enemy
+  - doorToContinue
   layers:
   - Default
   - TransparentFX

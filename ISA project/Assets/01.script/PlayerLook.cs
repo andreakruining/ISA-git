@@ -4,14 +4,35 @@ using UnityEngine;
 
 public class PlayerLook : MonoBehaviour
 {
-    public float rotationSpeed = 300f;
+    public float sensX;
+    public float sensY;
+
+    public Transform orientation;
+
+    float xRotation;
+    float yRotation;
+
+    private void Start()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
+
+    //public float mouseSensitivity = 100f;
+
 
     // Update is called once per frame
     void Update()
     {
-        Vector3 worldMousePosition = Camera.main.ScreenToWorldPoint(new Vector3 (Input.mousePosition.x, Input.mousePosition.y, Camera.main.transform.position.y));
-        //worldMousePosition.y = 0;
-        //transform.rotation = Quaternion.LookRotation(worldMousePosition - transform.position);
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(worldMousePosition - transform.position), rotationSpeed * Time.deltaTime);
+        //get mouse input
+        float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * sensX;
+        float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * sensY;
+
+        yRotation += mouseX;
+        xRotation -= mouseY;
+        xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+
+        transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
+        orientation.rotation = Quaternion.Euler(0, yRotation, 0);
     }
 }
